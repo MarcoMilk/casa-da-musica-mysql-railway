@@ -18,9 +18,10 @@ exports.listarProfessores =  async (req, res) => {
 exports.inserirProfessor = async (req, res) => {
   const {  nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep,
           endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
+  const cepLimpo = cep.replace(/\D/g, ''); // Remove tudo que não for número
    try {
         await pool.query(`INSERT INTO professores (nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor,cep,  endereco, numero, bairro, cidade, estado, complemento, obs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs]);
+        [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cepLimpo, endereco, numero, bairro, cidade, estado, complemento, obs]);
         res.redirect('/professores');
     } catch (err) {
         console.error(err);
@@ -33,12 +34,12 @@ exports.inserirProfessor = async (req, res) => {
 exports.atualizarProfessor =  async (req, res) => {
   const { idprofessor } = req.params;
   const { nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs } = req.body;
-
+  const cepLimpo = cep.replace(/\D/g, ''); // Remove tudo que não for número
   try {
 
     await pool.query(`UPDATE professores SET nome = ?, cpf_cnpj = ?, telefone = ?, email = ?, data_nasc = ?, idade = ?,
     sexo = ?, genero = ?, cor = ?, cep = ?, endereco = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?, obs = ? WHERE idprofessor = ?`,
-    [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cep, endereco, numero, bairro, cidade, estado, complemento, obs, idprofessor]);
+    [nome, cpf_cnpj, telefone, email, data_nasc, idade, sexo, genero, cor, cepLimpo, endereco, numero, bairro, cidade, estado, complemento, obs, idprofessor]);
     res.redirect('/professores');
 
    } catch (err) {
